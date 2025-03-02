@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const reservationSchema = z.object({
-  id: z.number().int().positive(), // Ensures it's a positive integer
+  id: z.string(),
   vehicleId: z.string().min(1), // Ensures it's a non-empty string
   startDateTime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/, 'Invalid ISO 8601 UTC datetime format'), // Validates ISO 8601 UTC format
   endDateTime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/, 'Invalid ISO 8601 UTC datetime format'), // Same validation as startDateTime

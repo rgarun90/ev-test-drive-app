@@ -41,13 +41,14 @@ export async function POST(req: NextRequest) {
       timeSlot,
       durationMins,
     })
+    console.log(`Available Vehicle - ${JSON.stringify(availableVehicle)}`)
 
     const startDateTime = convertToUTC(date, timeSlot)
     const endDateTime = addMinutes(startDateTime, durationMins).toISOString()
     const bookingId = Math.floor(Math.random() * 90000) + 10000
 
     const newReservation: Reservation = {
-      id: bookingId,
+      id: bookingId.toString(),
       vehicleId: availableVehicle.id,
       startDateTime,
       endDateTime,
@@ -63,12 +64,15 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify(newReservation),
     })
-
     const data = await apiResponse.json()
     console.log(data)
 
-    return NextResponse.json({ message: `Booking Confirmed and Booking Id: -${bookingId}` })
+    return NextResponse.json({ message: `Booking Confirmed and Booking Id - ${bookingId}` })
   } catch (error) {
-    return NextResponse.json({ message: `Error : ${error} ` }, { status: 500 })
+    let errorMessage = 'An unknown error occurred'
+    if (error instanceof Error) {
+      errorMessage = error.message
+    }
+    return NextResponse.json({ message: errorMessage }, { status: 500 })
   }
 }
