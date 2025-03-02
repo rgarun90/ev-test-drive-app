@@ -1,15 +1,17 @@
 'use client'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-
-import { cn } from '@/lib/utils'
+import { useTestDrive } from '@/context/TestDriveContext'
 
 import { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectValue, SelectTrigger } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+
+import { type bookingFormValues, bookingFormSchema } from '@/lib/schema/booking-form'
+import { cn } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
 import { Calendar } from '@/components/ui/calendar'
@@ -17,18 +19,6 @@ import { Button } from '@/components/ui/button'
 
 import { format, addDays } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
-
-const bookingSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().regex(/^\d{10}$/, 'Phone number must be 10 digits'),
-  //   vehicleType: z.enum(['tesla-model-3', 'tesla-model-x', 'tesla-model-y']),
-  date: z.date(),
-  timeSlot: z.string(),
-  location: z.string().min(2, 'Location is required'),
-})
-
-type BookingFormData = z.infer<typeof bookingSchema>
 
 const citiesInIreland = ['Dublin', 'Cork', 'Limerick', 'Galway', 'Waterford', 'Kilkenny', 'Sligo', 'Wexford']
 const timeSlots = [
@@ -51,8 +41,10 @@ const today = new Date()
 const maxDate = addDays(today, 14)
 
 export default function TestDriveBooking() {
+  const { vehicleType } = useTestDrive()
+  const [popoverMessage, setPopoverMessage] = useState<string | null>(null)
   const form = useForm({
-    resolver: zodResolver(bookingSchema),
+    resolver: zodResolver(bookingFormSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -62,11 +54,20 @@ export default function TestDriveBooking() {
       location: '',
     },
   })
+  const { control, handleSubmit, reset } = form
 
-  const { control, handleSubmit } = form
-
-  const onSubmit = (data: BookingFormData) => {
+  const onSubmit = async (data: bookingFormValues) => {
     console.log(data)
+
+    const response = await fetch('/api/testdrive/reservation', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, vehicleType }),
+    })
+
+    const result = await response.json()
+    setPopoverMessage(result.message)
+    if (response.ok) reset()
   }
 
   return (
@@ -212,9 +213,14 @@ export default function TestDriveBooking() {
               )}
             />
 
-            <Button type='submit' className='w-full'>
-              Book Test Drive
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button type='submit' className='w-full'>
+                  Book Test Drive
+                </Button>
+              </PopoverTrigger>
+              {popoverMessage && <PopoverContent className='w-56'>{popoverMessage}</PopoverContent>}
+            </Popover>
           </form>
         </Form>
       </CardContent>

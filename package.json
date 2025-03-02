@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "json-serve": "json-server --watch db.json --port 4000"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.2",
@@ -17,6 +18,8 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "date-fns-tz": "^3.2.0",
+    "json-server": "^1.0.0-beta.3",
     "lucide-react": "^0.476.0",
     "next": "15.2.1-canary.2",
     "react": "^18.3.1",
