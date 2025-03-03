@@ -12,6 +12,7 @@ export const bookingFormSchema = z.object({
   ),
   timeSlot: z.string({ required_error: 'Please select a location' }),
   location: z.string({ required_error: 'Location is required' }),
+  durationMins: z.string({ required_error: 'Duration is required' }),
 })
 
 export type bookingFormValues = z.infer<typeof bookingFormSchema>

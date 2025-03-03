@@ -36,7 +36,3 @@ Create a `.env.local` file and set the following environment variables:
 JSON_SERVER_BASE_URL="http://localhost:4000"
 NEXT_PUBLIC_API_BASE_URL="http://localhost:3000"
 ```
-
-## Limitations
-
-The test drive duration is currently set to 45 minutes as a hardcoded value.

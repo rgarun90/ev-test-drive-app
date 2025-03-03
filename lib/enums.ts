@@ -59,3 +59,11 @@ export enum CitiesInIreland {
 }
 
 export const cityOptions = Object.values(CitiesInIreland)
+
+export enum Duration {
+  '30 Mins' = '30',
+  '45 Mins' = '45',
+  '1 Hour' = '60',
+}
+
+export const durationOptions = Object.values(Duration)

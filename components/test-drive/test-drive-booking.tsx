@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 import { type bookingFormValues, bookingFormSchema } from '@/lib/schema/booking-form'
-import { timeSlotOptions, cityOptions } from '@/lib/enums'
+import { timeSlotOptions, cityOptions, durationOptions } from '@/lib/enums'
 import { cn } from '@/lib/utils'
 
 import { Input } from '@/components/ui/input'
@@ -39,6 +39,7 @@ export default function TestDriveBooking() {
       date: undefined,
       timeSlot: '',
       location: '',
+      durationMins: '',
     },
   })
   const { control, handleSubmit, reset } = form
@@ -189,7 +190,6 @@ export default function TestDriveBooking() {
                   <FormLabel>Select a Time</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value || ''}>
                     <FormControl>
-                      {/* className='w-full border border-gray-300 rounded-md h-9 text-left pl-2' */}
                       <SelectTrigger>
                         <SelectValue placeholder='Select a time slot' />
                       </SelectTrigger>
@@ -198,6 +198,32 @@ export default function TestDriveBooking() {
                       {timeSlotOptions.map((time, idx) => (
                         <SelectItem key={`${idx}-${time}`} value={time}>
                           {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Test Drive Duration Field */}
+            <FormField
+              control={control}
+              name='durationMins'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Test Drive Duration</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value || ''}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select duration (mins)' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {durationOptions.map((duration, idx) => (
+                        <SelectItem key={`${idx}-${duration}`} value={duration}>
+                          {duration}
                         </SelectItem>
                       ))}
                     </SelectContent>

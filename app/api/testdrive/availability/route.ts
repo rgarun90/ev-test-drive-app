@@ -4,7 +4,7 @@ import { checkAvailability } from '@/lib/services/availability-services'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { location, vehicleType, date, timeSlot, durationMins = '45' } = body //TODO: make durationMins dynamic
+    const { location, vehicleType, date, timeSlot, durationMins } = body
 
     const availableVehicles = await checkAvailability({
       location,

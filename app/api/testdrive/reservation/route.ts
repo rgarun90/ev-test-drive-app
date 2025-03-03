@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const validatedData = bookingFormSchema.parse(body)
     console.log(validatedData)
 
-    const { location, vehicleType, date, timeSlot, durationMins = 45 } = body //TODO: make durationMins dynamic
+    const { location, vehicleType, date, timeSlot, durationMins } = body
 
     const availableVehicle = await checkAvailability({
       location,
