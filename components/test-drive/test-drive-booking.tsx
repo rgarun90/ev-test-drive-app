@@ -17,13 +17,13 @@ import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
 
 import { format, addDays } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 
 export default function TestDriveBooking() {
   const { vehicleType } = useTestDrive()
-  const [popoverMessage, setPopoverMessage] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
 
   // Calculate the date range (today to 14 days in the future)
@@ -44,8 +44,6 @@ export default function TestDriveBooking() {
   const { control, handleSubmit, reset } = form
 
   const onSubmit = async (data: bookingFormValues) => {
-    console.log(data)
-
     const response = await fetch('/api/testdrive/reservation', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -53,8 +51,13 @@ export default function TestDriveBooking() {
     })
 
     const result = await response.json()
-    setPopoverMessage(result.message)
-    if (response.ok) reset()
+
+    if (response.ok) {
+      reset()
+      toast.success(result.message, { duration: 10000 })
+    } else {
+      toast.error(result.message, { duration: 5000 })
+    }
   }
 
   return (
@@ -204,14 +207,9 @@ export default function TestDriveBooking() {
               )}
             />
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button type='submit' className='w-full'>
-                  Book Test Drive
-                </Button>
-              </PopoverTrigger>
-              {popoverMessage && <PopoverContent className='w-56'>{popoverMessage}</PopoverContent>}
-            </Popover>
+            <Button type='submit' className='w-full'>
+              Book Test Drive
+            </Button>
           </form>
         </Form>
       </CardContent>

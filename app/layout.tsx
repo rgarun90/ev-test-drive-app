@@ -5,6 +5,7 @@ import './globals.css'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { TestDriveProvider } from '@/context/TestDriveContext'
+import { Toaster } from '@/components/ui/sonner'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,6 +34,7 @@ export default function RootLayout({
           <Header />
           <TestDriveProvider>
             <main className='flex-1 p-2'>{children}</main>
+            <Toaster position='top-center' />
           </TestDriveProvider>
           <Footer />
         </div>
