@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { bookingFormSchema } from '@/lib/schema/booking-form'
 import { Reservation } from '@/lib/schema/reservation'
 
-import { checkAvailability } from '@/app/api/testdrive/availability/route'
+import { checkAvailability } from '@/lib/services/availability-services'
 import { convertToUTC } from '@/lib/utils'
 import { addMinutes } from 'date-fns'
 
