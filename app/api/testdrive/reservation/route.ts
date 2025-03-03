@@ -28,7 +28,6 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    //TODO: validation check
     const validatedData = bookingFormSchema.parse(body)
     console.log(validatedData)
 
